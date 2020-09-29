@@ -18,7 +18,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login','register']]);
+        $this->middleware('auth:api', ['except' => ['login', 'register']]);
     }
 
     /**
@@ -31,7 +31,7 @@ class AuthController extends Controller
 
         $credentials = request(['email', 'password']);
 
-        if (! $token = auth()->attempt($credentials)) {
+        if (!$token = auth()->attempt($credentials)) {
 
             return response()->json(['error' => 'Unauthorized'], 401);
         }
@@ -89,29 +89,32 @@ class AuthController extends Controller
 
 
 
-    public function register(Request $request){
+    public function register(Request $request)
+    {
 
 
         $pass =  Hash::make($request->password);
         $user =  User::create([
-            'name'=> $request->name,
-            'email'=> $request->email,
-            'password'=> $pass
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => $pass
 
-            ]);
+        ]);
 
 
-            $credentials = request(['email', 'password']);
+        $credentials = request(['email', 'password']);
 
-            if (! $token = auth()->attempt($credentials)) {
+        if (!$token = auth()->attempt($credentials)) {
 
-                return response()->json(['error' => 'Unauthorized'], 401);
-            }
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
 
-            return $this->respondWithToken(['name'=> $request->name,'email'=> $request->email,'jwt'=>$token]);
-
+        return $this->respondWithToken(['name' => $request->name, 'email' => $request->email, 'jwt' => $token]);
     }
 
-// Register önce validasyon yapılacak ve Login düzeltilecek
+    // Register önce validasyon yapılacak ve Login düzeltilecek
+
+
+
 
 }

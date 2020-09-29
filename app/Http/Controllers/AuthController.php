@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
@@ -27,9 +28,11 @@ class AuthController extends Controller
      */
     public function login()
     {
+
         $credentials = request(['email', 'password']);
 
         if (! $token = auth()->attempt($credentials)) {
+
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
@@ -85,12 +88,27 @@ class AuthController extends Controller
     }
 
 
+
     public function register(Request $request){
 
-        $pass = Hash::make($request->password);
-        $user =  User::create(['name'=> $request->name, 'email'=> $request->email,'password'=> $pass]);
 
-        return response()->json(['success'=>true, 'data'=> $user]);
+        $pass =  Hash::make($request->password);
+        $user =  User::create([
+            'name'=> $request->name,
+            'email'=> $request->email,
+            'password'=> $pass
+
+            ]);
+
+
+            $credentials = request(['email', 'password']);
+
+            if (! $token = auth()->attempt($credentials)) {
+
+                return response()->json(['error' => 'Unauthorized'], 401);
+            }
+
+            return $this->respondWithToken(['name'=> $request->name,'email'=> $request->email,'jwt'=>$token]);
 
     }
 

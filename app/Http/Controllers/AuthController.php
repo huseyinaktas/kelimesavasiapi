@@ -114,7 +114,4 @@ class AuthController extends Controller
 
     // Register önce validasyon yapılacak ve Login düzeltilecek
 
-
-
-
 }

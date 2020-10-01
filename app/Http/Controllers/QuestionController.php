@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Answer;
 use App\Question;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,7 @@ class QuestionController extends Controller
      */
     public function index()
     {
-        $questions = Question::all();
+        $questions = Question::with("answers")->get();
         return response()->json(['success' => true, "data" => $questions], 200);
     }
 
@@ -30,6 +31,12 @@ class QuestionController extends Controller
             "content" => $request->content,
             "category_id" => $request->category_id,
         ]);
+
+        foreach ($request->answers as $answer) {
+            $ans = Answer::make(["title" => $answer["title"]]);
+            $question->answers()->save($ans);
+        }
+
         return response()->json(['success' => true, "data" => $question], 201);
     }
 
@@ -41,7 +48,7 @@ class QuestionController extends Controller
      */
     public function show($id)
     {
-        $question = Question::findOrFail($id);
+        $question = Question::with("answers")->findOrFail($id);
         return response()->json(['success' => true, "data" => $question], 200);
     }
 

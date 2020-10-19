@@ -35,7 +35,6 @@ class AuthController extends Controller
 
             return response()->json(['error' => 'Unauthorized'], 401);
         }
-
         return $this->respondWithToken($token);
     }
 
@@ -91,8 +90,6 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
-
-
         $pass =  Hash::make($request->password);
         $user =  User::create([
             'name' => $request->name,

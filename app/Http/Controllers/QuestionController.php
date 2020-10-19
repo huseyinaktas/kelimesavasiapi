@@ -12,10 +12,11 @@ class QuestionController extends Controller
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
+     *
      */
     public function index()
     {
-        $questions = Question::with("answers")->get();
+        $questions = Question::with(["answers", "category"])->get();
         return response()->json(['success' => true, "data" => $questions], 200);
     }
 

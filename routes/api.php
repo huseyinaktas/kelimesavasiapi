@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\CheckAdmin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -33,7 +34,13 @@ Route::group([
     Route::post('register', 'AuthController@register');
 });
 
+Route::group(['middleware' => ['checkAdmin']], function () {
+    Route::resource("/questions", "QuestionController");
+    Route::resource("/categories", "CategoryController");
+});
+
+Route::resource("/users", "UserProfileController");
 
 
-Route::resource("/questions", "QuestionController");
-Route::resource("/categories", "CategoryController");
+// Route::resource("/questions", "QuestionController");
+// Route::resource("/categories", "CategoryController");
